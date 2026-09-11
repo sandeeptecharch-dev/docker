@@ -1,0 +1,7 @@
+FROM node:18
+
+WORKDIR /pathnex-app
+
+COPY pathnex-app-v4.js .
+
+CMD ["node", "pathnex-app-v4.js"]
