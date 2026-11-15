@@ -1,7 +1,7 @@
 FROM node:18
 
-WORKDIR /pathnex-app
+WORKDIR /app
 
-COPY pathnex-app-v2.js .
+COPY app-v2.js .
 
-CMD ["node", "pathnex-app-v2.js"]
+CMD ["node", "app-v2.js"]
