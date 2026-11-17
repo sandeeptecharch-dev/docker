@@ -1,0 +1,46 @@
+services:
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "3001:3001"
+    environment:
+      MONGO_URL: mongodb://mongodb:27017/ecommerce
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - ecommerce-network
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "3002:3002"
+    environment:
+      MONGO_URL: mongodb://mongodb:27017/ecommerce
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+    networks:
+      - ecommerce-network
+
+  mongodb:
+    image: mongo:7
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
